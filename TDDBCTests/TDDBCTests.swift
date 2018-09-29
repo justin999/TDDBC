@@ -95,6 +95,31 @@ class TDDBCTests: XCTestCase {
         let actual = Set(machine.canBuyDrinks())
         XCTAssertEqual(Set(["コーラ", "ウーロン茶", "レッドブル", "ジンジャーエール"]), actual)
     }
+    
+    // Q6
+    func test_10円入れられる() {
+        machine.insert(.ten)
+        let actual = machine.amount
+        XCTAssertEqual(10, actual)
+    }
+    
+    func test_50円入れられる() {
+        machine.insert(.fifty)
+        let actual = machine.amount
+        XCTAssertEqual(50, actual)
+    }
+    
+    func test_100円入れられる() {
+        machine.insert(.hundred)
+        let actual = machine.amount
+        XCTAssertEqual(100, actual)
+    }
+    
+    func test_500円入れられる() {
+        machine.insert(.fiveHundred)
+        let actual = machine.amount
+        XCTAssertEqual(500, actual)
+    }
 }
 
 import Foundation
@@ -128,6 +153,13 @@ class Machine {
         }
     }
     
+    enum Coin: Int {
+        case ten = 10
+        case fifty = 50
+        case hundred = 100
+        case fiveHundred = 500
+    }
+    
     func pushButton(drink: Drink) -> String? {
         if amount >= drink.price {
             amount -= drink.price
@@ -137,8 +169,8 @@ class Machine {
         }
     }
     
-    func insert() {
-        amount += 100
+    func insert(_ coin: Coin = .hundred) {
+        amount += coin.rawValue
     }
     
     func canBuyDrinks() -> [String] {
