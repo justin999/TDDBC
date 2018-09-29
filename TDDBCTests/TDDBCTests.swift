@@ -19,17 +19,17 @@ class TDDBCTests: XCTestCase {
     }
 
     override func tearDown() {
-        
     }
+    
     // Q1
     func test_コーラ出る() {
         machine.insert()
-        let actual = machine.pushButton()
+        let actual = machine.pushButton(drink: .cola)
         XCTAssertEqual("コーラ", actual)
     }
     
     func test_コーラ出ない() {
-        let actual = machine.pushButton()
+        let actual = machine.pushButton(drink: .cola)
         XCTAssertNotEqual("コーラ", actual)
     }
     
@@ -43,21 +43,16 @@ class TDDBCTests: XCTestCase {
     // Q3
     func test_コーラボタンを押したらコーラが出ます() {
         machine.insert()
-        let actual = machine.pushColaButton()
+        let actual = machine.pushButton(drink: .cola)
         XCTAssertEqual("コーラ", actual)
     }
     
     func test_ウーロン茶ボタンを押したらウーロン茶が出ます() {
         machine.insert()
-        let actual = machine.pushOolongTeaButton()
+        let actual = machine.pushButton(drink: .oolong)
         XCTAssertEqual("ウーロン茶", actual)
     }
     
-    func test_ジンジャーエールボタンを押したらジンジャーエールが出ます() {
-        machine.insert()
-        let actual = machine.pushGingerAleButton()
-        XCTAssertEqual("ジンジャーエール", actual)
-    }
 }
 
 import Foundation
@@ -66,9 +61,15 @@ class Machine {
     var amount: Int = 0
     var inserted: Bool = false
     
-    func pushButton() -> String? {
+    enum Drink: String {
+        case cola    = "コーラ"
+        case oolong  = "ウーロン茶"
+        case ginger  = "ジンジャーエール"
+    }
+    
+    func pushButton(drink: Drink) -> String? {
         if inserted {
-            return "コーラ"
+            return drink.rawValue
         } else {
             return nil
         }
@@ -78,27 +79,4 @@ class Machine {
         self.inserted = true
     }
     
-    func pushColaButton() -> String? {
-        if inserted {
-            return "コーラ"
-        } else {
-            return nil
-        }
-    }
-    
-    func pushOolongTeaButton() -> String? {
-        if inserted {
-            return "ウーロン茶"
-        } else {
-            return nil
-        }
-    }
-    
-    func pushGingerAleButton() -> String? {
-        if inserted {
-            return "ジンジャーエール"
-        } else {
-            return nil
-        }
-    }
 }
