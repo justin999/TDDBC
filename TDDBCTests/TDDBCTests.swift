@@ -82,6 +82,19 @@ class TDDBCTests: XCTestCase {
         let actual = machine.pushButton(drink: .redbull)
         XCTAssertEqual(nil, actual)
     }
+    
+    func test_100円入れるとコーラとジンジャーエールが光る() {
+        machine.insert()
+        let actual = Set(machine.canBuyDrinks())
+        XCTAssertEqual(Set(["コーラ", "ジンジャーエール"]), actual)
+    }
+    
+    func test_200円入れるとコーラとジンジャーエールとウーロン茶が光る() {
+        machine.insert()
+        machine.insert()
+        let actual = Set(machine.canBuyDrinks())
+        XCTAssertEqual(Set(["コーラ", "ウーロン茶", "レッドブル", "ジンジャーエール"]), actual)
+    }
 }
 
 import Foundation
@@ -97,7 +110,7 @@ class Machine {
 //        case redbull = ("レッドブル", 200)
 //    }
     
-    enum Drink: String {
+    enum Drink: String, CaseIterable {
         case cola    = "コーラ"
         case oolong  = "ウーロン茶"
         case ginger  = "ジンジャーエール"
@@ -126,6 +139,15 @@ class Machine {
     
     func insert() {
         amount += 100
+    }
+    
+    func canBuyDrinks() -> [String] {
+        return Drink.allCases.compactMap { drink in
+            if drink.price <= amount {
+                return drink.rawValue
+            }
+            return nil
+        }
     }
     
 }
